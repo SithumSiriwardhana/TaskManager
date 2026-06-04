@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TaskManagerAPI.Data;
+using TaskManagerAPI.Middleware;
+using TaskManagerAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,17 +25,26 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Seed initial admin user if DB is empty
+using (var scope = app.Services.CreateScope())
 {
-    app.MapOpenApi();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+
+    if (!db.Users.Any())
+    {
+        db.Users.Add(new User
+        {
+            Username = "admin",
+            PasswordHash = BasicAuthMiddleware.HashPassword("admin123")
+        });
+        db.SaveChanges();
+    }
 }
 
 app.UseCors("AllowAngular");
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
+app.UseMiddleware<BasicAuthMiddleware>();
 
 app.MapControllers();
 
