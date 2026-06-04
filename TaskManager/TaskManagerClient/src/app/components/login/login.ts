@@ -30,7 +30,7 @@ export class LoginComponent {
 
     this.auth.login(this.username, this.password).subscribe({
       next: () => this.router.navigate(['/dashboard']),
-      error: () => {
+      error: (e) => {
         this.errorMessage = 'Invalid username or password.';
         this.loading = false;
       }
