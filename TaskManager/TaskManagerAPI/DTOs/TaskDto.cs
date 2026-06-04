@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TaskManagementAPI.DTOs;
+namespace TaskManagerAPI.DTOs;
 
 public class CreateTaskDto
 {
