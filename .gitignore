@@ -480,3 +480,14 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+
+# Angular / Node
+node_modules/
+dist/
+.angular/
+.cache/
+npm-debug.log
+yarn-error.log
+*.env
+.env.local
