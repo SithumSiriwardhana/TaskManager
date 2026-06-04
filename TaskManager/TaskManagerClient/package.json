@@ -29,9 +29,10 @@
     "@angular/forms": "^21.0.0",
     "@angular/platform-browser": "^21.0.0",
     "@angular/router": "^21.0.0",
+    "jest-editor-support": "*",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "jest-editor-support": "*"
+    "zone.js": "^0.16.2"
   },
   "devDependencies": {
     "@angular/build": "^21.0.1",

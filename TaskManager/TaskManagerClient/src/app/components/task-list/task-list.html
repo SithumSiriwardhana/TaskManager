@@ -1,0 +1,65 @@
+<div class="task-list-container">
+  <div class="panel-header">
+    <h2>Tasks <span class="count" *ngIf="tasks.length">({{ tasks.length }})</span></h2>
+  </div>
+
+  <div class="filters">
+    <input type="text"
+           [(ngModel)]="search"
+           (ngModelChange)="loadTasks()"
+           placeholder="Search tasks..."
+           class="search-input" />
+    <select [(ngModel)]="statusFilter" (ngModelChange)="loadTasks()" class="filter-select">
+      <option value="">All Status</option>
+      <option value="pending">Pending</option>
+      <option value="completed">Completed</option>
+    </select>
+    <select [(ngModel)]="sortBy" (ngModelChange)="loadTasks()" class="filter-select">
+      <option value="createdAt">Sort: Date</option>
+      <option value="title">Sort: Title</option>
+      <option value="priority">Sort: Priority</option>
+      <option value="dueDate">Sort: Due Date</option>
+    </select>
+    <select [(ngModel)]="sortDir" (ngModelChange)="loadTasks()" class="filter-select">
+      <option value="desc">Desc</option>
+      <option value="asc">Asc</option>
+    </select>
+  </div>
+
+  <div class="alert success" *ngIf="successMessage">{{ successMessage }}</div>
+  <div class="alert error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="loading" *ngIf="loading">Loading tasks...</div>
+
+  <div class="empty-state" *ngIf="!loading && tasks.length === 0">
+    <div class="empty-icon">&#128221;</div>
+    <p>No tasks found. Add one on the right!</p>
+  </div>
+
+  <ul class="task-items" *ngIf="!loading && tasks.length > 0">
+    <li *ngFor="let task of tasks" class="task-item" [class.completed]="task.isCompleted">
+      <div class="task-checkbox">
+        <input type="checkbox"
+               [checked]="task.isCompleted"
+               (change)="toggleComplete(task)"
+               [id]="'task-' + task.id" />
+      </div>
+      <div class="task-body">
+        <label [for]="'task-' + task.id" class="task-title">{{ task.title }}</label>
+        <p class="task-desc" *ngIf="task.description">{{ task.description }}</p>
+        <div class="task-meta">
+          <span class="priority-badge" [class]="getPriorityClass(task.priority)">
+            {{ priorityLabels[task.priority] }}
+          </span>
+          <span class="due-date" *ngIf="task.dueDate">
+            Due: {{ task.dueDate | date:'mediumDate' }}
+          </span>
+        </div>
+      </div>
+      <div class="task-actions">
+        <button class="btn-icon edit" (click)="onEdit(task)" title="Edit">&#9998;</button>
+        <button class="btn-icon delete" (click)="deleteTask(task)" title="Delete">&#128465;</button>
+      </div>
+    </li>
+  </ul>
+</div>

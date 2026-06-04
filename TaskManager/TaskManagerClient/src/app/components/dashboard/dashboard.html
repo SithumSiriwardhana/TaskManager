@@ -1,0 +1,26 @@
+<div class="app-shell">
+  <header class="top-bar">
+    <div class="brand">
+      <span class="brand-icon">&#10003;</span>
+      <span class="brand-name">Task Manager</span>
+    </div>
+    <div class="user-info">
+      <span class="username">{{ auth.getUsername() }}</span>
+      <button class="btn-logout" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="side-by-side">
+      <div class="panel left-panel">
+        <app-task-list [refreshTrigger]="refreshTrigger"
+                       (editTask)="onEditTask($event)"></app-task-list>
+      </div>
+      <div class="panel right-panel">
+        <app-task-form [taskToEdit]="selectedTask"
+                       (saved)="onFormSaved()"
+                       (cancelled)="onFormCancelled()"></app-task-form>
+      </div>
+    </div>
+  </main>
+</div>
