@@ -24,7 +24,7 @@ public class TasksController : ControllerBase
         [FromQuery] string? sortBy,
         [FromQuery] string? sortDir)
     {
-        var query = _db.Tasks.AsQueryable();
+        var query = _db.Tasks.AsNoTracking().AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(search))
             query = query.Where(t => t.Title.Contains(search) || (t.Description != null && t.Description.Contains(search)));
@@ -51,7 +51,10 @@ public class TasksController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var task = await _db.Tasks.FindAsync(id);
+        var task = await _db.Tasks
+            .AsNoTracking()
+            .FirstOrDefaultAsync(t => t.Id == id);
+
         if (task == null)
             return NotFound(new { message = $"Task with id {id} not found." });
         return Ok(task);
